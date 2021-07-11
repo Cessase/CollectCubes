@@ -6,24 +6,22 @@ using UnityEngine;
 public class CubeEventController : MonoBehaviour
 {
     [SerializeField] private Material mat;
-    private Rigidbody cubeBody;
+    
     private Renderer rend;
+    private ProgressBar progress;
+    private Rigidbody cubeBody;
 
-    private int totalCubesRescued;
-    
-    
     // Start is called before the first frame update
     void Start()
     {
         cubeBody = GetComponent<Rigidbody>();
+        progress = FindObjectOfType<ProgressBar>();
         rend = GetComponent<Renderer>();
+        progress.nextLevel += ResetForNext;
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        
-    }
+   
 
     private void OnTriggerEnter(Collider other)
     {
@@ -31,7 +29,14 @@ public class CubeEventController : MonoBehaviour
         {
             gameObject.layer = 9;
             rend.material = mat;
-            totalCubesRescued++;
+            progress.totalCubesRescued++;
         }
     }
+
+    void ResetForNext()
+    {
+        cubeBody.rotation = Quaternion.identity;
+        cubeBody.velocity = Vector3.zero;
+    }
+    
 }

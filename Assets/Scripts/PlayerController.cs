@@ -42,7 +42,6 @@ public class PlayerController : MonoBehaviour
         }
 
         player.velocity = direction * speed;
-        //transform.rotation = Quaternion.Slerp(transform.rotation, rotationTo, Time.deltaTime * rotationSpeed);
         player.MoveRotation(rotationTo.normalized);
     }
     

@@ -8,12 +8,13 @@ using UnityEngine;
 public class LevelGenerator : MonoBehaviour
 {
     public Texture2D[] maps;
+    [SerializeField] private GUI endScreen;
     
     private ObjectPool objects;
     
-    private int cubesInLevel;
-    private int level = 0;
-    public int Level { get => level; set => level = value; }
+    private float cubesInLevel; 
+    public float CubesInLevel { get => cubesInLevel; set => cubesInLevel = value; }
+    private int level = 0; public int Level { get => level; set => level = value; }
 
     // Start is called before the first frame update
     void Start()
@@ -39,6 +40,16 @@ public class LevelGenerator : MonoBehaviour
             }
         }
         
+    }
+
+    public void LoadNextLeveL()
+    {
+        cubesInLevel = 0;
+        objects.DisableObjectsForNextLevel();
+        if (level < maps.Length)
+        {
+            GenerateLevel();
+        }
     }
     
 }
