@@ -1,8 +1,5 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Net;
-using System.Runtime.InteropServices.WindowsRuntime;
+
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -15,13 +12,13 @@ public class ProgressBar : MonoBehaviour
     [SerializeField] private TextMeshProUGUI nextlevelText;
     [SerializeField][Range(0f,1f)] private  float requiredProgressforNextLevel;
     [SerializeField] private Canvas endScreen;
-    
-    
+    [SerializeField] private Button exitButton;
+    [SerializeField] private GameObject exitGameUI;
+    [SerializeField] private float progress;
     private LevelGenerator levelGen;
     public event Action nextLevel;
     
     public float totalCubesRescued;
-    private float progress;
     private bool canSkipNextLevel = false;
     private bool cooldown;
 
@@ -33,11 +30,12 @@ public class ProgressBar : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         UpdateLevel();
         FillProgressBar();
         NextLevelButtonController();
+        EndLevelOnFullProgress();
     }
 
     public void UpdateLevel()
@@ -52,13 +50,14 @@ public class ProgressBar : MonoBehaviour
     {
         progress = totalCubesRescued / levelGen.CubesInLevel;
         progressBar.fillAmount = progress;
-        //Debug.Log(progress);
         if (progress > requiredProgressforNextLevel)
         {
+            Debug.Log(totalCubesRescued + " " + levelGen.CubesInLevel);
             canSkipNextLevel = true;
         }
     }
 
+    // ReSharper disable Unity.PerformanceAnalysis
     void NextLevelButtonController()
     {
         if (levelGen.Level < 4)
@@ -66,6 +65,7 @@ public class ProgressBar : MonoBehaviour
             if (cooldown == false)
             {
                 nextLevelButton.onClick.AddListener(SkipNextLevel);
+                exitButton.onClick.AddListener(ShowExitMenu);
                 Invoke("ResetCooldown", 2.0f);
                 cooldown = true;
             }
@@ -75,9 +75,19 @@ public class ProgressBar : MonoBehaviour
             endScreen.gameObject.SetActive(true);
             Time.timeScale = 0;
         }
-
         ColorButton();
     }
+
+    void EndLevelOnFullProgress()
+    {
+        if (progress >= 1f)
+            {
+                canSkipNextLevel = true;
+                Invoke("SkipNextLevel", 3.0f);
+            }
+
+    }
+        
 
     private void ColorButton()
     {
@@ -109,16 +119,18 @@ public class ProgressBar : MonoBehaviour
     {
         nextLevel();
         
-            if (canSkipNextLevel)
-                {
-                levelGen.Level++;
-                levelGen.LoadNextLeveL();
-                canSkipNextLevel = false;
-                totalCubesRescued = 0;
-                } 
-        
-        
-        
+        if (canSkipNextLevel)
+        {
+            levelGen.Level++;
+            levelGen.LoadNextLeveL();
+            canSkipNextLevel = false;
+            totalCubesRescued = 0;
+        }
+    }
+    
+    void ShowExitMenu()
+    {
+        exitGameUI.SetActive(true);
     }
     
     

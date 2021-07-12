@@ -1,19 +1,14 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditorInternal;
+
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private float speed = 5;
-    [SerializeField] private float rotationSpeed;
-    
+    [SerializeField] private Joystick joystick;
+        
     private Rigidbody player;
-
     private Quaternion rotationTo;
     private Vector3 direction;
-    
     private float horizontalInput;
     private float verticalInput;
     
@@ -31,8 +26,11 @@ public class PlayerController : MonoBehaviour
 
     private void PlayerMovement()
     {
-        horizontalInput = Input.GetAxis("Horizontal");
-        verticalInput = Input.GetAxis("Vertical");
+       // horizontalInput = Input.GetAxis("Horizontal");
+       // verticalInput = Input.GetAxis("Vertical");
+
+        horizontalInput = joystick.Horizontal;
+        verticalInput = joystick.Vertical;
 
         direction = new Vector3(horizontalInput, 0, verticalInput);
 
@@ -43,6 +41,8 @@ public class PlayerController : MonoBehaviour
 
         player.velocity = direction * speed;
         player.MoveRotation(rotationTo.normalized);
+        
+        
     }
     
 }

@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+
 using UnityEngine;
 
 public class ObjectPool : MonoBehaviour
@@ -15,11 +14,12 @@ public class ObjectPool : MonoBehaviour
         PopulatePool();
     }
 
+    // ReSharper disable Unity.PerformanceAnalysis
     public void InstantiateObject(int i,int j, Color c)
     {
         float x = -1.5f + i * 0.1f;
         float z = 0f + j * 0.1f;
-        pool[i,j].transform.position = new Vector3(x,0.55f,z);
+        pool[i,j].transform.position = new Vector3(x,0.525f,z);
         pool[i,j].GetComponent<ColorCube>().C = c;
         pool[i,j].SetActive(true);
     }

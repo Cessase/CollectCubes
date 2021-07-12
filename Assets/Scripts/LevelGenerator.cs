@@ -1,15 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.InteropServices.WindowsRuntime;
-using UnityEditor;
-using UnityEditorInternal;
+
 using UnityEngine;
 
 public class LevelGenerator : MonoBehaviour
 {
     public Texture2D[] maps;
-    [SerializeField] private GUI endScreen;
-    
     private ObjectPool objects;
     
     private float cubesInLevel; 
